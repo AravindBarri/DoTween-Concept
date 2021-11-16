@@ -11,7 +11,6 @@ public class DoPathExampleScript : MonoBehaviour
     [SerializeField] PathMode pathMode;
     bool isHit = false;
     [SerializeField] Vector3[] path;
-    int counter = 0;
 
     private void OnCollisionEnter(Collision collision)
     {
