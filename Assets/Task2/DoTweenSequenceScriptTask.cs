@@ -13,15 +13,29 @@ public class DoTweenSequenceScriptTask : MonoBehaviour
     [SerializeField] PathMode pathMode;
     [SerializeField] Vector3[] path;
     [SerializeField] Vector3[] returnPath;
+    [SerializeField] float timer;
+    [SerializeField] bool keycheck = false;
+    TweenCallback check;
     // Start is called before the first frame update
     void Start()
     {
-        
+        check += checkMethod;
+    }
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            keycheck = true;
+        }
+        if(keycheck)
+        {
+            timer += Time.deltaTime;
+        }
     }
 
-    
     public void StartTweening()
     {
+        keycheck = true;
         MeshRenderer mr = this.gameObject.GetComponent<MeshRenderer>();
         Sequence seq = DOTween.Sequence();
         seq
@@ -35,7 +49,10 @@ public class DoTweenSequenceScriptTask : MonoBehaviour
             .Join(mr.material.DOFade(0, 3f))
             .Append(this.gameObject.transform.DOMove(new Vector3(0, 1, 80), animationDuration))
             .Join(mr.material.DOFade(1, 3f))
-            .OnComplete(() => { this.transform.DOPath(returnPath, reversePathAnimationDuration, pathType, pathMode, 10, Color.red); });
+            .OnComplete(() => { this.transform.DOPath(returnPath, reversePathAnimationDuration, pathType, pathMode, 10, Color.red); keycheck = false; });
     }
-    
+    public void checkMethod()
+    {
+        Debug.Log("OnUpdateCheck");
+    }
 }
